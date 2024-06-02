@@ -20,7 +20,7 @@ for d in */ ; do
         # Trở về thư mục gốc
         cd /www/wwwroot/leloi
         # Thêm repository như một submodule
-        git submodule add -b "$current_branch" "$remote_url" "$d"
+        git submodule add "$remote_url" "$d"
     fi
 done
 
