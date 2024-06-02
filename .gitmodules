@@ -1,0 +1,3 @@
+[submodule "helm-charts/bitbucket"]
+	path = helm-charts/bitbucket
+	url = https://github.com/tintucthethao/bitbucket
