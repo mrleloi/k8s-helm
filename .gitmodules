@@ -8,3 +8,4 @@
 [submodule "helm-charts/jira-helm"]
 	path = helm-charts/jira-helm
 	url = https://bitbucket.baityapp.online/scm/helmcharts/jira-helm.git
+	branch = main
