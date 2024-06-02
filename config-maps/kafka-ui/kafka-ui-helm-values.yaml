@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: kafka-ui-helm-values
+  namespace: bigdata
+data:
+  KAFKA_CLUSTERS_0_NAME: "kafka-master"
+  KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: "kafka:9092"
+  KAFKA_CLUSTERS_0_PROPERTIES_SECURITY_PROTOCOL: "SASL_SSL"
+#   AUTH_TYPE: "DISABLED"
+  MANAGEMENT_HEALTH_LDAP_ENABLED: "FALSE"
+  KAFKA_CLUSTERS_0_PROPERTIES_SASL_MECHANISM: "SASL_PLAINTEXT"
+  KAFKA_CLUSTERS_0_PROPERTIES_SASL_JAAS_CONFIG: org.apache.kafka.common.security.plain.PlainLoginModule required username="kafkaui" password="12345689";
+#   AUTH_TYPE: "DISABLED"
+#   MANAGEMENT_HEALTH_LDAP_ENABLED: "FALSE" 

@@ -1,0 +1,95 @@
+#
+# IMPORTANT NOTE
+#
+# This chart inherits from our common library chart. You can check the default values/options here:
+# https://github.com/k8s-at-home/library-charts/tree/main/charts/stable/common/values.yaml
+#
+
+image:
+  # -- image repository
+  repository: filebrowser/filebrowser
+  # -- image tag
+  tag: v2.18.0
+  # -- image pull policy
+  pullPolicy: IfNotPresent
+
+# @default -- See below
+env:
+  # -- Set the container timezone
+  TZ: UTC
+
+# -- Configures service settings for the chart.
+# @default -- See values.yaml
+service:
+  main:
+    nameOverride: "filebrowser-srv"
+    ports:
+      http:
+        port: 80
+
+ingress:
+  main:
+    # -- Enables or disables the ingress
+    enabled: true
+
+    # -- Make this the primary ingress (used in probes, notes, etc...).
+    # If there is more than 1 ingress, make sure that only 1 ingress is marked as primary.
+    primary: true
+
+    # -- Override the name suffix that is used for this ingress.
+    nameOverride:
+
+    # -- Provide additional annotations which may be required.
+    annotations:
+      kubernetes.io/ingress.class: nginx
+      kubernetes.io/tls-acme: "true"
+      cert-manager.io/cluster-issuer: letsencrypt-prod
+
+    # -- Provide additional labels which may be required.
+    labels: {}
+
+    # -- Set the ingressClass that is used for this ingress.
+    # Requires Kubernetes >=1.19
+    ingressClassName:  "nginx"
+
+    ## Configure the hosts for the ingress
+    hosts:
+      -  # -- Host address. Helm template can be passed.
+        host: portworx.baityapp.online
+        ## Configure the paths for the host
+        paths:
+          -  # -- Path.  Helm template can be passed.
+            path: /
+            # -- Ignored if not kubeVersion >= 1.14-0
+            pathType: Prefix
+            service:
+              # -- Overrides the service name reference for this path
+              name: filebrowser-filebrowser-srv
+              # -- Overrides the service port reference for this path
+              port: 80
+
+    # -- Configure TLS for the ingress. Both secretName and hosts can process a Helm template.
+    tls:
+    - secretName: portworx.baityapp.online-tls
+      hosts:
+      - portworx.baityapp.online
+
+config: |
+  {
+    "port": 80,
+    "baseURL": "",
+    "address": "",
+    "log": "stdout",
+    "database": "/config/database.db",
+    "root": "/srv/data"
+  }
+
+# -- Configure persistence settings for the chart under this key.
+# @default -- See values.yaml
+persistence:
+  config:
+    enabled: false
+    mountpath: /config
+  data:
+    enabled: false
+    mountPath: /srv

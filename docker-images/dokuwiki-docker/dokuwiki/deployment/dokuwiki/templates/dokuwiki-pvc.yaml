@@ -1,0 +1,19 @@
+---
+# Source: dokuwiki/templates/dokuwiki-pvc.yaml
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: dokuwiki
+  namespace: "default"
+  labels:
+    app.kubernetes.io/instance: dokuwiki
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: dokuwiki
+    app.kubernetes.io/version: 20230404.1.0
+    helm.sh/chart: dokuwiki-14.7.2
+spec:
+  accessModes:
+    - "ReadWriteOnce"
+  resources:
+    requests:
+      storage: "1Gi"

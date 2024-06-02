@@ -1,0 +1,29 @@
+# kubectl delete -f configmap-filebeat-confluence.yaml -n atlassian-software
+
+# kubectl apply -f configmap-filebeat-confluence.yaml -n atlassian-software
+
+# kubectl get configmap -n atlassian-software filebeat-config-confluence -o yaml
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: filebeat-config-confluence
+  namespace: atlassian-software
+data:
+  filebeat.yml: |-
+    filebeat.config:
+    modules:
+      path: ${path.config}/modules.d/*.yml
+      # Kích hoạt hot reload với một khoảng thời gian kiểm tra cụ thể.
+      reload.enabled: true
+      reload.period: 10s
+    filebeat.inputs:
+    - type: log
+      enabled: true
+      tags: ["confluence", "kubernetes-container", "atlassian-software"]
+      paths:
+        - /usr/share/filebeat/confluence-log-1/*.log
+        - /usr/share/filebeat/confluence-log-2/audit/*.log
+        - /usr/share/filebeat/confluence-log-2/jfr/*.log
+    output.logstash:
+      hosts: [ "logstash-logstash.monitoring.svc.cluster.local:5044" ]

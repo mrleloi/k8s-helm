@@ -1,0 +1,30 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: copy-files-job
+  namespace: dex
+spec:
+  template:
+    spec:
+      nodeName: mail.baityapp.online  # Đặt tên node mong muốn
+      securityContext:
+        fsGroup: 0
+        runAsUser: 0  # Đặt quyền root cho Pod
+      containers:
+      - name: busybox
+        image: busybox
+        command: ["sh", "-c", "cp -Rf /hostpath/* /web"]  # Điều chỉnh đường dẫn hostpath và mountpath theo yêu cầu
+        volumeMounts:
+        - name: hostpath-volume
+          mountPath: /hostpath
+        - name: pvc-volume
+          mountPath: /web
+      restartPolicy: Never
+      volumes:
+      - name: hostpath-volume
+        hostPath:
+          path: /www/wwwroot/leloi/helm-charts/wiremind-dex/web  # Điều chỉnh đường dẫn của thư mục hostpath
+          type: Directory
+      - name: pvc-volume
+        persistentVolumeClaim:
+          claimName: web  # Thay 'your-pvc-name' bằng tên của Persistent Volume Claim của bạn

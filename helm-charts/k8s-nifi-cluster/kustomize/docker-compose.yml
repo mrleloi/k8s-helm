@@ -1,0 +1,7 @@
+version: '3'
+services:
+  nifi:
+    image: harbor.baityapp.online/core/nifi:1.25.0
+    build:
+      context: .
+      dockerfile: Dockerfile

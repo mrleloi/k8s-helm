@@ -1,0 +1,15 @@
+version: "3"
+
+services:
+  libreoffice:
+    image: collabora/code
+    container_name: libreoffice
+    restart: always
+    cap_add: 
+      - MKNOD
+    environment: 
+      - domain=nextcloud.baityapp.online
+      - username=admin
+      - password=123456a@A
+    ports:
+      - 9980:9980

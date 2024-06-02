@@ -1,0 +1,61 @@
+# kubectl delete configmap jobs-samplepy -n spark-jobs
+
+# kubectl create configmap jobs-samplepy --from-file=sample.py=./jobs/sample.py -n spark-jobs
+
+# kubectl get configmap jobs-samplepy -n spark-jobs -o yaml
+
+# kubectl apply -f configmap-jobs-samplepy.yaml -n spark-jobs
+apiVersion: v1
+data:
+  sample.py: "# Import the necessary modules\nimport os\nimport pandas as pd\nfrom
+    pyspark.sql import SparkSession\nfrom pyspark.sql.functions import sum as _sum\nfrom
+    pyspark.sql.functions import col\nfrom minio import Minio\nfrom minio.error import
+    S3Error\n\ndef main():\n    ### Đọc file excel từ Minio và lưu về folder\n    #
+    Đọc các biến môi trường\n    # minio_endpoint = os.getenv('MINIO_ENDPOINT')\n
+    \   # minio_access_key = os.getenv('MINIO_ACCESS_KEY')\n    # minio_secret_key
+    = os.getenv('MINIO_SECRET_KEY')\n    # bucket_name = os.getenv('MINIO_BUCKET')\n
+    \   \n    minio_endpoint = 'minioapi.baityapp.online'\n    minio_access_key =
+    'APhF5997dO3AvMRgmanX'\n    minio_secret_key = 'EEAIaSSiFxEkp5Tm7NvgLRAKTJJlBNkAvWR73nCT'\n
+    \   bucket_name = 'bigdata'\n    \n    object_name = \"baityexcel.xlsx\"\n    excel_file_path
+    = \"/tmp/baityexcel.xlsx\"\n    \n    # Cấu hình kết nối MinIO\n    minio_config
+    = {\n        \"endpoint\": minio_endpoint,\n        \"access_key\": minio_access_key,\n
+    \       \"secret_key\": minio_secret_key,\n        \"secure\": True  # Sử dụng
+    True nếu MinIO cài đặt với SSL\n    }\n    # Tải file\n    download_file_from_minio(bucket_name,
+    object_name, excel_file_path, minio_config)\n\n    ### Xử lý tính toán spark\n
+    \   # Khởi tạo Spark Session\n    spark = SparkSession.builder \\\n        .appName(\"ExcelToCassandraElasticsearch\")
+    \\\n        .config(\"spark.cassandra.connection.host\", \"cassandra_host\") \\\n
+    \       .config(\"spark.cassandra.connection.port\", \"cassandra_port\") \\\n
+    \       .config(\"spark.cassandra.auth.username\", \"username\") \\\n        .config(\"spark.cassandra.auth.password\",
+    \"password\") \\\n        .config(\"spark.es.nodes\", \"elasticsearch_host\")
+    \\\n        .config(\"spark.es.port\", \"elasticsearch_port\") \\\n        .config(\"spark.es.nodes.wan.only\",
+    \"true\") \\\n        .getOrCreate()\n    \n    # Đọc file Excel từ MinIO (hoặc
+    địa chỉ cụ thể)\n    pdf = pd.read_excel(excel_file_path, sheet_name=\"sheet1\",
+    engine='openpyxl')\n    \n    # Chuyển DataFrame từ Pandas sang Spark\n    sdf
+    = spark.createDataFrame(pdf)\n    \n    # Tính tổng\n    if sdf.count() > 0:\n
+    \       TOTAL_SUM = sum([float(sdf.collect()[0][c]) for c in sdf.columns if sdf.collect()[0][c]
+    is not None and str(sdf.collect()[0][c]).isdigit()])\n    else:\n        TOTAL_SUM
+    = 0\n    \n    print(f\"TOTAL_SUM: {TOTAL_SUM}\")\n    \n    # Lưu kết quả vào
+    Cassandra\n    # sdf.write \\\n    #     .format(\"org.apache.spark.sql.cassandra\")
+    \\\n    #     .mode(\"append\") \\\n    #     .options(table=\"table_name\", keyspace=\"keyspace_name\")
+    \\\n    #     .save()\n    \n    # Lưu kết quả vào Elasticsearch\n    # sdf.write
+    \\\n    #     .format(\"org.elasticsearch.spark.sql\") \\\n    #     .option(\"es.resource\",
+    \"index_name/doc_type\") \\\n    #     .option(\"es.nodes\", \"elasticsearch_host\")
+    \\\n    #     .option(\"es.port\", \"elasticsearch_port\") \\\n    #     .mode(\"append\")
+    \\\n    #     .save()\n    \n    spark.stop()\n\ndef download_file_from_minio(bucket_name,
+    object_name, file_path, minio_config):\n    \"\"\"\n    Tải file từ MinIO.\n    \n
+    \   Args:\n    - bucket_name: Tên bucket trên MinIO.\n    - object_name: Tên object/file
+    bạn muốn tải.\n    - file_path: Đường dẫn lưu file sau khi tải.\n    - minio_config:
+    Cấu hình kết nối đến MinIO bao gồm endpoint, access_key và secret_key.\n    \"\"\"\n
+    \   # Tạo đối tượng MinIO client\n    minio_client = Minio(\n        minio_config[\"endpoint\"],\n
+    \       access_key=minio_config[\"access_key\"],\n        secret_key=minio_config[\"secret_key\"],\n
+    \       secure=minio_config[\"secure\"]\n    )\n    \n    try:\n        # Tải
+    file từ MinIO\n        minio_client.fget_object(bucket_name, object_name, file_path)\n
+    \       print(f\"File {object_name} downloaded successfully.\")\n    except S3Error
+    as e:\n        print(f\"Failed to download {object_name}: {e}\")\n      \n# Run\nmain()"
+kind: ConfigMap
+metadata:
+  creationTimestamp: "2024-04-11T05:08:36Z"
+  name: jobs-samplepy
+  namespace: spark-jobs
+  resourceVersion: "32228864"
+  uid: 53c9b9a7-bd62-4082-b79d-53664720b9b7

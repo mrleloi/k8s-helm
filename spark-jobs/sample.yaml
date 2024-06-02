@@ -1,0 +1,64 @@
+# kubectl delete -f sample.yaml -n spark-jobs
+
+# kubectl apply -f sample.yaml -n spark-jobs
+
+# kubectl get sparkapplication -n spark-jobs
+
+# watch "kubectl describe sparkapplication spark-python-sample  -n spark-jobs | grep -A20 Events"
+
+# watch "kubectl logs spark-python-sample-driver  -n spark-jobs | tail -40"
+
+# kubectl delete sparkapplication spark-python-sample -n spark-jobs
+
+apiVersion: sparkoperator.k8s.io/v1beta2
+kind: SparkApplication
+metadata:
+  name: spark-python-sample
+  namespace: spark-jobs
+spec:
+  type: Python
+  pythonVersion: '3'
+  mode: cluster
+  image: 'leloimr/spark-master:latest'
+  imagePullPolicy: Always
+  mainApplicationFile: 'local:///opt/spark/work-dir/jobs/sample.py'
+  sparkVersion: 3.5.1
+  volumes:
+    - name: spark-script-volume
+      configMap:
+        name: jobs-samplepy
+    - name: temp-storage
+      emptyDir: {}
+  driver:
+    envVars:
+      EXCEL_FILE_URL: ${EXCEL_FILE_URL}
+    #   MINIO_ENDPOINT: 'https://minioapi.baityapp.online'
+    #   MINIO_ACCESS_KEY: APhF5997dO3AvMRgmanX
+    #   MINIO_SECRET_KEY: EEAIaSSiFxEkp5Tm7NvgLRAKTJJlBNkAvWR73nCT
+    #   MINIO_BUCKET: bigdata
+    serviceAccount: spark
+    volumeMounts:
+      - name: spark-script-volume
+        mountPath: /opt/spark/work-dir/jobs
+      - name: temp-storage
+        mountPath: /tmp
+    cores: 1
+    coreLimit: "1200m"
+    memory: "512m"
+  executor:
+    instances: 1
+    envVars:
+      EXCEL_FILE_URL: ${EXCEL_FILE_URL}
+    #   MINIO_ENDPOINT: 'https://minioapi.baityapp.online'
+    #   MINIO_ACCESS_KEY: APhF5997dO3AvMRgmanX
+    #   MINIO_SECRET_KEY: EEAIaSSiFxEkp5Tm7NvgLRAKTJJlBNkAvWR73nCT
+    #   MINIO_BUCKET: bigdata
+    serviceAccount: spark
+    volumeMounts:
+      - name: spark-script-volume
+        mountPath: /opt/spark/work-dir/jobs
+      - name: temp-storage
+        mountPath: /tmp
+    cores: 1
+    coreLimit: "1200m"
+    memory: "512m"

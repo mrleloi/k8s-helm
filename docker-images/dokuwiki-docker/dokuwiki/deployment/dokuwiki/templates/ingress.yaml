@@ -1,0 +1,31 @@
+---
+# Source: dokuwiki/templates/ingress.yaml
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: dokuwiki
+  namespace: "default"
+  labels:
+    app.kubernetes.io/instance: dokuwiki
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: dokuwiki
+    app.kubernetes.io/version: 20230404.1.0
+    helm.sh/chart: dokuwiki-14.7.2
+  annotations:
+spec:
+  ingressClassName: "nginx"
+  rules:
+    - host: wiki.baityapp.online
+      http:
+        paths:
+          - path: /
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: dokuwiki
+                port:
+                  name: http
+  tls:
+    - hosts:
+        - wiki.baityapp.online
+      secretName: wiki.baityapp.online-tls

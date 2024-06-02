@@ -1,0 +1,62 @@
+{{- $certmanager := .Capabilities.APIVersions.Has "cert-manager.io/v1" -}}
+{{- $webhooks := .Values.admissionWebhooks.enabled -}}
+{{- $disableCertManagerCheck := .Values.disableCertManagerCheck -}}
+
+{{- if and $webhooks (not $certmanager) (not $disableCertManagerCheck) -}}
+  {{- fail (print "cass-operator webhooks require cert-manager to be installed in the cluster") }}
+{{- end -}}
+
+kind: ConfigMap
+metadata:
+  name: {{ include "k8ssandra-common.fullname" . }}-manager-config
+  labels: {{ include "k8ssandra-common.labels" . | indent 4 }}
+apiVersion: v1
+data:
+  controller_manager_config.yaml: |
+    apiVersion: config.k8ssandra.io/v1beta1
+    kind: OperatorConfig
+    health:
+      healthProbeBindAddress: :8081
+    metrics:
+      bindAddress: {{ .Values.metrics.address }}
+    webhook:
+      port: 9443
+    leaderElection:
+      leaderElect: true
+      resourceName: b569adb7.cassandra.datastax.com
+{{- if $webhooks }}
+    disableWebhooks: false
+{{- else }}
+    disableWebhooks: true
+{{- end }}
+    imageConfigFile: /configs/image_config.yaml
+  image_config.yaml: |
+    apiVersion: config.k8ssandra.io/v1beta1
+    kind: ImageConfig
+    images:
+      system-logger: {{ .Values.imageConfig.systemLogger }}
+      config-builder: {{ .Values.imageConfig.configBuilder }}
+      k8ssandra-client: {{ .Values.imageConfig.k8ssandraClient }}
+{{- if .Values.image.repositoryOverride }}
+    {{- with .Values.image.repositoryOverride }}
+      {{- toYaml . | nindent 6 }}
+    {{- end }}
+{{- end }}
+{{- if .Values.image.registryOverride }}
+    imageRegistry: {{ .Values.image.registryOverride }}
+{{- end }}
+{{- if .Values.imagePullSecret }}
+    imagePullSecret:
+      name: {{ .Values.imagePullSecret }}
+{{- end }}
+{{- if .Values.image.pullPolicy }}
+    {{ (cat "imagePullPolicy:" .Values.image.pullPolicy) }}
+{{- end }}
+    defaults:
+      # Note, postfix is ignored if repository is not set
+      cassandra:
+        repository: "cr.k8ssandra.io/k8ssandra/cass-management-api"
+        suffix;: "-ubi8"
+      dse:
+        repository: "cr.dtsx.io/datastax/dse-mgmtapi-6_8"
+        suffix: "-ubi8"

@@ -1,0 +1,29 @@
+---
+# Source: dokuwiki/templates/svc.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: dokuwiki
+  namespace: "default"
+  labels:
+    app.kubernetes.io/instance: dokuwiki
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: dokuwiki
+    app.kubernetes.io/version: 20230404.1.0
+    helm.sh/chart: dokuwiki-14.7.2
+spec:
+  type: NodePort
+  externalTrafficPolicy: "Cluster"
+  sessionAffinity: None
+  ports:
+    - name: http
+      port: 80
+      targetPort: http
+      nodePort: 31888
+    - name: https
+      port: 443
+      targetPort: https
+      nodePort: 31889
+  selector:
+    app.kubernetes.io/instance: dokuwiki
+    app.kubernetes.io/name: dokuwiki

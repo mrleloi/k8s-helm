@@ -1,0 +1,9 @@
+# kubectl create configmap -n monitoring logstash-config --from-file=logstash.yml=/www/wwwroot/leloi/config-maps/logstash/logstash-config.yml
+
+# kubectl get configmap -n monitoring logstash-config -o yaml
+# kubectl delete configmap -n monitoring logstash-config
+    
+    http.host: "0.0.0.0"
+    xpack.monitoring.elasticsearch.hosts: [ "http://elasticsearch:9200" ]
+    config.reload.automatic: true
+    config.reload.interval: 10s

@@ -1,0 +1,21 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: k10-k10-basic-config
+  namespace: k10
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: k10-basic-config
+subjects:
+# - apiGroup: rbac.authorization.k8s.io
+#   kind: User
+#   name: k10-basic
+
+- apiGroup: rbac.authorization.k8s.io
+  kind: Group
+  name: k10:admins
+
+- apiGroup: rbac.authorization.k8s.io
+  kind: Group
+  name: k10-administrators

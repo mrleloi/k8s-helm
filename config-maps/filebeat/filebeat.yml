@@ -1,0 +1,431 @@
+  filebeat.config:
+  modules:
+    path: ${path.config}/modules.d/*.yml
+    # Kích hoạt hot reload với một khoảng thời gian kiểm tra cụ thể.
+    reload.enabled: true
+    reload.period: 10s
+  filebeat.inputs:
+#   - type: container
+#     paths:
+#       - /var/log/containers/alertmanager-kube-prometheus-stack-alertmanager-*.log
+#     tags: ["alertmanager", "kubernetes-container", "monitoring", "kube-prometheus-stack"]
+#     processors:
+#     - add_kubernetes_metadata:
+#         host: ${NODE_NAME}
+#         matchers:
+#         - logs_path:
+#             logs_path: "/var/log/containers/"
+#   - type: container
+#     paths:
+#       - /var/log/containers/prometheus-kube-prometheus-stack-prometheus-*.log
+#     tags: ["prometheus", "kubernetes-container", "monitoring", "kube-prometheus-stack"]
+#     processors:
+#     - add_kubernetes_metadata:
+#         host: ${NODE_NAME}
+#         matchers:
+#         - logs_path:
+#             logs_path: "/var/log/containers/"
+#   - type: container
+#     paths:
+#       - /var/log/containers/kube-prometheus-stack-grafana-*.log
+#     tags: ["grafana", "kubernetes-container", "monitoring", "kube-prometheus-stack"]
+#     processors:
+#     - add_kubernetes_metadata:
+#         host: ${NODE_NAME}
+#         matchers:
+#         - logs_path:
+#             logs_path: "/var/log/containers/"
+#   - type: container
+#     paths:
+#       - /var/log/containers/kube-prometheus-stack-kube-state-metrics-*.log
+#     tags: ["state-metrics", "kubernetes-container", "monitoring", "kube-prometheus-stack"]
+#     processors:
+#     - add_kubernetes_metadata:
+#         host: ${NODE_NAME}
+#         matchers:
+#         - logs_path:
+#             logs_path: "/var/log/containers/"
+#   - type: container
+#     paths:
+#       - /var/log/containers/kube-prometheus-stack-operator-*.log
+#     tags: ["kube-prometheus-stack-operator", "kubernetes-container", "monitoring", "kube-prometheus-stack"]
+#     processors:
+#     - add_kubernetes_metadata:
+#         host: ${NODE_NAME}
+#         matchers:
+#         - logs_path:
+#             logs_path: "/var/log/containers/"
+#   - type: container
+#     paths:
+#       - /var/log/containers/kube-prometheus-stack-prometheus-node-exporter-*.log
+#     tags: ["prometheus-node-exporter", "kubernetes-container", "monitoring", "kube-prometheus-stack"]
+#     processors:
+#     - add_kubernetes_metadata:
+#         host: ${NODE_NAME}
+#         matchers:
+#         - logs_path:
+#             logs_path: "/var/log/containers/"
+#   - type: container
+#     paths:
+#       - /var/log/containers/elasticsearch-*.log
+#     tags: ["elasticsearch", "kubernetes-container", "monitoring", "elk-stack"]
+#     processors:
+#     - add_kubernetes_metadata:
+#         host: ${NODE_NAME}
+#         matchers:
+#         - logs_path:
+#             logs_path: "/var/log/containers/"
+#   - type: container
+#     paths:
+#       - /var/log/containers/filebeat-filebeat-*.log
+#     tags: ["filebeat", "kubernetes-container", "monitoring", "elk-stack"]
+#     processors:
+#     - add_kubernetes_metadata:
+#         host: ${NODE_NAME}
+#         matchers:
+#         - logs_path:
+#             logs_path: "/var/log/containers/"
+#   - type: container
+#     paths:
+#       - /var/log/containers/kibana-*.log
+#     tags: ["kibana", "kubernetes-container", "monitoring", "elk-stack"]
+#     processors:
+#     - add_kubernetes_metadata:
+#         host: ${NODE_NAME}
+#         matchers:
+#         - logs_path:
+#             logs_path: "/var/log/containers/"
+#   - type: container
+#     paths:
+#       - /var/log/containers/logstash-*.log
+#     tags: ["logstash", "kubernetes-container", "monitoring", "elk-stack"]
+#     processors:
+#     - add_kubernetes_metadata:
+#         host: ${NODE_NAME}
+#         matchers:
+#         - logs_path:
+#             logs_path: "/var/log/containers/"
+#   - type: container
+#     paths:
+#       - /var/log/containers/bitbucket-*.log
+#     tags: ["bitbucket", "kubernetes-container", "atlassian-software"]
+#     processors:
+#     - add_kubernetes_metadata:
+#         host: ${NODE_NAME}
+#         matchers:
+#         - logs_path:
+#             logs_path: "/var/log/containers/"
+#   - type: container
+#     paths:
+#       - /var/log/containers/confluence-*.log
+#     tags: ["confluence", "kubernetes-container", "atlassian-software"]
+#     processors:
+#     - add_kubernetes_metadata:
+#         host: ${NODE_NAME}
+#         matchers:
+#         - logs_path:
+#             logs_path: "/var/log/containers/"
+#   - type: container
+#     paths:
+#       - /var/log/containers/crowd-*.log
+#     tags: ["crowd", "kubernetes-container", "atlassian-software"]
+#     processors:
+#     - add_kubernetes_metadata:
+#         host: ${NODE_NAME}
+#         matchers:
+#         - logs_path:
+#             logs_path: "/var/log/containers/"
+#   - type: container
+#     paths:
+#       - /var/log/containers/fisheye-*.log
+#     tags: ["fisheye", "kubernetes-container", "atlassian-software"]
+#     processors:
+#     - add_kubernetes_metadata:
+#         host: ${NODE_NAME}
+#         matchers:
+#         - logs_path:
+#             logs_path: "/var/log/containers/"
+#   - type: container
+#     paths:
+#       - /var/log/containers/jira-*.log
+#     tags: ["jira", "kubernetes-container", "atlassian-software"]
+#     processors:
+#     - add_kubernetes_metadata:
+#         host: ${NODE_NAME}
+#         matchers:
+#         - logs_path:
+#             logs_path: "/var/log/containers/"
+#   - type: container
+#     paths:
+#       - /var/log/containers/servicemanagement-*.log
+#     tags: ["servicemanagement", "kubernetes-container", "atlassian-software"]
+#     processors:
+#     - add_kubernetes_metadata:
+#         host: ${NODE_NAME}
+#         matchers:
+#         - logs_path:
+#             logs_path: "/var/log/containers/"
+#   - type: container
+#     paths:
+#       - /var/log/containers/argo-argocd-*.log
+#     tags: ["argocd", "kubernetes-container", "cicd"]
+#     processors:
+#     - add_kubernetes_metadata:
+#         host: ${NODE_NAME}
+#         matchers:
+#         - logs_path:
+#             logs_path: "/var/log/containers/"
+#   - type: container
+#     paths:
+#       - /var/log/containers/harbor-*.log
+#     tags: ["harbor", "kubernetes-container", "cicd"]
+#     processors:
+#     - add_kubernetes_metadata:
+#         host: ${NODE_NAME}
+#         matchers:
+#         - logs_path:
+#             logs_path: "/var/log/containers/"
+#   - type: container
+#     paths:
+#       - /var/log/containers/jenkins-*.log
+#     tags: ["jenkins", "kubernetes-container", "cicd"]
+#     processors:
+#     - add_kubernetes_metadata:
+#         host: ${NODE_NAME}
+#         matchers:
+#         - logs_path:
+#             logs_path: "/var/log/containers/"
+#   - type: container
+#     paths:
+#       - /var/log/containers/anesta-master-*.log
+#     tags: ["anesta-master", "kubernetes-container", "anesta", "default"]
+#     processors:
+#     - add_kubernetes_metadata:
+#         host: ${NODE_NAME}
+#         matchers:
+#         - logs_path:
+#             logs_path: "/var/log/containers/"
+#   - type: container
+#     paths:
+#       - /var/log/containers/anesta-staging-*.log
+#     tags: ["anesta-staging", "kubernetes-container", "anesta", "default"]
+#     processors:
+#     - add_kubernetes_metadata:
+#         host: ${NODE_NAME}
+#         matchers:
+#         - logs_path:
+#             logs_path: "/var/log/containers/"
+#   - type: container
+#     paths:
+#       - /var/log/containers/anesta-dev-*.log
+#     tags: ["anesta-dev", "kubernetes-container", "anesta", "default"]
+#     processors:
+#     - add_kubernetes_metadata:
+#         host: ${NODE_NAME}
+#         matchers:
+#         - logs_path:
+#             logs_path: "/var/log/containers/"
+#   - type: container
+#     paths:
+#       - /var/log/containers/baity-system-master-*.log
+#     tags: ["baity-system-master", "kubernetes-container", "baity-system", "default"]
+#     processors:
+#     - add_kubernetes_metadata:
+#         host: ${NODE_NAME}
+#         matchers:
+#         - logs_path:
+#             logs_path: "/var/log/containers/"
+#   - type: container
+#     paths:
+#       - /var/log/containers/baity-system-staging-*.log
+#     tags: ["baity-system-staging", "kubernetes-container", "baity-system", "default"]
+#     processors:
+#     - add_kubernetes_metadata:
+#         host: ${NODE_NAME}
+#         matchers:
+#         - logs_path:
+#             logs_path: "/var/log/containers/"
+#   - type: container
+#     paths:
+#       - /var/log/containers/laravel-cicd-master-*.log
+#     tags: ["laravel-cicd-master", "kubernetes-container", "laravel-cicd", "default"]
+#     processors:
+#     - add_kubernetes_metadata:
+#         host: ${NODE_NAME}
+#         matchers:
+#         - logs_path:
+#             logs_path: "/var/log/containers/"
+#   - type: container
+#     paths:
+#       - /var/log/containers/laravel-cicd-staging-*.log
+#     tags: ["laravel-cicd-staging", "kubernetes-container", "laravel-cicd", "default"]
+#     processors:
+#     - add_kubernetes_metadata:
+#         host: ${NODE_NAME}
+#         matchers:
+#         - logs_path:
+#             logs_path: "/var/log/containers/"
+#   - type: container
+#     paths:
+#       - /var/log/containers/laravel-cicd-dev-*.log
+#     tags: ["laravel-cicd-dev", "kubernetes-container", "laravel-cicd", "default"]
+#     processors:
+#     - add_kubernetes_metadata:
+#         host: ${NODE_NAME}
+#         matchers:
+#         - logs_path:
+#             logs_path: "/var/log/containers/"
+#   - type: container
+#     paths:
+#       - /var/log/containers/zent-master-*.log
+#     tags: ["zent-master", "kubernetes-container", "zent", "default"]
+#     processors:
+#     - add_kubernetes_metadata:
+#         host: ${NODE_NAME}
+#         matchers:
+#         - logs_path:
+#             logs_path: "/var/log/containers/"
+#   - type: container
+#     paths:
+#       - /var/log/containers/zent-staging-*.log
+#     tags: ["zent-staging", "kubernetes-container", "zent", "default"]
+#     processors:
+#     - add_kubernetes_metadata:
+#         host: ${NODE_NAME}
+#         matchers:
+#         - logs_path:
+#             logs_path: "/var/log/containers/"
+#   - type: container
+#     paths:
+#       - /var/log/containers/zent-dev-*.log
+#     tags: ["zent-dev", "kubernetes-container", "zent", "default"]
+#     processors:
+#     - add_kubernetes_metadata:
+#         host: ${NODE_NAME}
+#         matchers:
+#         - logs_path:
+#             logs_path: "/var/log/containers/"
+#   - type: container
+#     paths:
+#       - /var/log/containers/mailu-*.log
+#     tags: ["mailu", "kubernetes-container", "mailu-mailserver"]
+#     processors:
+#     - add_kubernetes_metadata:
+#         host: ${NODE_NAME}
+#         matchers:
+#         - logs_path:
+#             logs_path: "/var/log/containers/"
+#   - type: container
+#     paths:
+#       - /var/log/containers/mariadb-*.log
+#     tags: ["mariadb", "kubernetes-container"]
+#     processors:
+#     - add_kubernetes_metadata:
+#         host: ${NODE_NAME}
+#         matchers:
+#         - logs_path:
+#             logs_path: "/var/log/containers/"
+#   - type: container
+#     paths:
+#       - /var/log/containers/phpmyadmin-*.log
+#     tags: ["phpmyadmin", "kubernetes-container", "mariadb"]
+#     processors:
+#     - add_kubernetes_metadata:
+#         host: ${NODE_NAME}
+#         matchers:
+#         - logs_path:
+#             logs_path: "/var/log/containers/"
+#   - type: container
+#     paths:
+#       - /var/log/containers/minio-*.log
+#     tags: ["minio", "kubernetes-container"]
+#     processors:
+#     - add_kubernetes_metadata:
+#         host: ${NODE_NAME}
+#         matchers:
+#         - logs_path:
+#             logs_path: "/var/log/containers/"
+#   - type: container
+#     paths:
+#       - /var/log/containers/libreoffice-*.log
+#     tags: ["libreoffice", "kubernetes-container"]
+#     processors:
+#     - add_kubernetes_metadata:
+#         host: ${NODE_NAME}
+#         matchers:
+#         - logs_path:
+#             logs_path: "/var/log/containers/"
+#   - type: container
+#     paths:
+#       - /var/log/containers/nextcloud-*.log
+#     tags: ["nextcloud", "kubernetes-container"]
+#     processors:
+#     - add_kubernetes_metadata:
+#         host: ${NODE_NAME}
+#         matchers:
+#         - logs_path:
+#             logs_path: "/var/log/containers/"
+#   - type: container
+#     paths:
+#       - /var/log/containers/pgadmin-*.log
+#     tags: ["pgadmin", "kubernetes-container"]
+#     processors:
+#     - add_kubernetes_metadata:
+#         host: ${NODE_NAME}
+#         matchers:
+#         - logs_path:
+#             logs_path: "/var/log/containers/"
+#   - type: container
+#     paths:
+#       - /var/log/containers/postgresql-*.log
+#     tags: ["postgresql", "kubernetes-container"]
+#     processors:
+#     - add_kubernetes_metadata:
+#         host: ${NODE_NAME}
+#         matchers:
+#         - logs_path:
+#             logs_path: "/var/log/containers/"
+#   - type: container
+#     paths:
+#       - /var/log/containers/redis-*.log
+#     tags: ["redis", "kubernetes-container"]
+#     processors:
+#     - add_kubernetes_metadata:
+#         host: ${NODE_NAME}
+#         matchers:
+#         - logs_path:
+#             logs_path: "/var/log/containers/"
+#   output.logstash:
+#     hosts: [ "logstash-logstash:5044" ]
+  - type: container
+    paths:
+      - /var/log/containers/baity-system-dev-*.log
+    tags: ["baity-system-dev", "kubernetes-container", "baity-system", "default"]
+    processors:
+    - add_kubernetes_metadata:
+        host: ${NODE_NAME}
+        matchers:
+        - logs_path:
+            logs_path: "/var/log/containers/"
+  - type: container
+    paths:
+      - /var/log/containers/anesta-master-*_default_wordpress*.log
+    tags: ["anesta-master", "kubernetes-container", "anesta", "default"]
+    processors:
+    - add_kubernetes_metadata:
+        host: ${NODE_NAME}
+        matchers:
+        - logs_path:
+            logs_path: "/var/log/containers/"
+  - type: container
+    paths:
+      - /var/log/containers/nifi-*.log
+    tags: ["nifi", "kubernetes-container"]
+    processors:
+    - add_kubernetes_metadata:
+        host: ${NODE_NAME}
+        matchers:
+        - logs_path:
+            logs_path: "/var/log/containers/"
+  output.logstash:
+    hosts: [ "logstash-logstash:5044" ]

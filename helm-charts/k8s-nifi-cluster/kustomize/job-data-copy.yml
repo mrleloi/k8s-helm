@@ -1,0 +1,25 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: data-copy-job
+  namespace: nifi
+spec:
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+      - name: copy-container
+        image: docker.io/apache/nifi:1.25.0
+        command: ['sh', '-c', 'cp -r /opt/nifi/nifi-current/temp/lib/* /opt/nifi/nifi-current/lib/']
+        volumeMounts:
+          - name: nifi-temp
+            mountPath: /opt/nifi/nifi-current/temp
+          - name: nifi-lib
+            mountPath: /opt/nifi/nifi-current/lib
+      volumes:
+        - name: nifi-temp
+          persistentVolumeClaim:
+            claimName: nifi-temp
+        - name: nifi-lib
+          persistentVolumeClaim:
+            claimName: nifi-lib

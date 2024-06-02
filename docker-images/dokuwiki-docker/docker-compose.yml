@@ -1,0 +1,27 @@
+version: '3'
+services:
+  dokuwiki:
+    container_name: dokuwiki1
+    image: bitnami/dokuwiki:latest
+    restart: always
+    environment:
+      - DOKUWIKI_USERNAME=admin
+      - DOKUWIKI_FULL_NAME=admin
+      - DOKUWIKI_EMAIL=admin@gmail.com
+      - DOKUWIKI_PASSWORD=123456a@A
+      - DOKUWIKI_WIKI_NAME=wiki
+    #   - PHP_DEFAULT_MEMORY_LIMIT=256m
+    networks:
+      - dokuwiki
+    ports:
+      - '8889:8080'
+    volumes:
+      - 'dokuwiki_data:/bitnami/dokuwiki'
+
+networks:
+  dokuwiki:
+    external: false
+
+volumes:
+  dokuwiki_data:
+    driver: local

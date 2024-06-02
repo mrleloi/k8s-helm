@@ -1,0 +1,39 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: rbac-all-cluster-role-binding
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: rbac-all-cluster-role
+subjects:
+# - apiGroup: rbac.authorization.k8s.io
+#   kind: User
+#   name: k10-basic
+
+- apiGroup: rbac.authorization.k8s.io
+  kind: Group
+  name: k10:admins
+
+- apiGroup: rbac.authorization.k8s.io
+  kind: Group
+  name: k10-administrators
+
+
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: rbac-all-cluster-role
+subjects:
+# - apiGroup: rbac.authorization.k8s.io
+#   kind: User
+#   name: k10-basic
+
+- apiGroup: rbac.authorization.k8s.io
+  kind: Group
+  name: k10:admins
+
+- apiGroup: rbac.authorization.k8s.io
+  kind: Group
+  name: k10-administrators
+

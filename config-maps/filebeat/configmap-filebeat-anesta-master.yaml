@@ -1,0 +1,32 @@
+# kubectl delete -f configmap-filebeat-anesta-master.yaml -n default
+
+# kubectl apply -f configmap-filebeat-anesta-master.yaml -n default
+
+# kubectl get configmap -n default configmap-filebeat-anesta-master -o yaml
+
+# apiVersion: v1
+# kind: ConfigMap
+# metadata:
+#   name: filebeat-config-anesta-master
+#   namespace: default
+# data:
+#   filebeat.yml: |-
+#     filebeat.config:
+#     modules:
+#       path: ${path.config}/modules.d/*.yml
+#       # Kích hoạt hot reload với một khoảng thời gian kiểm tra cụ thể.
+#       reload.enabled: true
+#       reload.period: 10s
+#     filebeat.inputs:
+#       - type: container
+#         paths:
+#           - /var/log/containers/anesta-master-7ff5d6dfbd-9gf5f_default_wordpress*.log
+#         tags: ["anesta-master", "kubernetes-container", "default"]
+#         processors:
+#         - add_kubernetes_metadata:
+#             host: ${NODE_NAME}
+#             matchers:
+#             - logs_path:
+#                 logs_path: "/var/log/containers/"
+#     output.logstash:
+#       hosts: [ "logstash-logstash.monitoring.svc.cluster.local:5044" ]

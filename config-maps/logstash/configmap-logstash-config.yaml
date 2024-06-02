@@ -1,0 +1,16 @@
+# kubectl create configmap -n monitoring logstash-config --from-file=logstash.yml=/www/wwwroot/leloi/config-maps/logstash/logstash-config.yml
+
+# kubectl get configmap -n monitoring logstash-config -o yaml
+apiVersion: v1
+data:
+  logstash.yml: "# kubectl create configmap -n monitoring logstash-config --from-file=logstash.yml=/www/wwwroot/leloi/config-maps/logstash/logstash-config.yml\n\n#
+    kubectl get configmap -n monitoring logstash-config -o yaml\n    \n    http.host:
+    \"0.0.0.0\"\n    xpack.monitoring.elasticsearch.hosts: [ \"http://elasticsearch:9200\"
+    ]\n    config.reload.automatic: true\n    config.reload.interval: 10s"
+kind: ConfigMap
+metadata:
+  creationTimestamp: "2024-04-06T03:15:15Z"
+  name: logstash-config
+  namespace: monitoring
+  resourceVersion: "26583380"
+  uid: 009fb93c-b064-43e9-a2cc-535a64ff213c

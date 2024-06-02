@@ -1,0 +1,28 @@
+kind: Policy
+apiVersion: config.kio.kasten.io/v1alpha1
+metadata:
+  name: oauth2-weekly
+  namespace: k10
+spec:
+  presetRef:
+    name: weekly
+    namespace: k10
+  selector:
+    matchExpressions:
+      - key: k10.kasten.io/appNamespace
+        operator: In
+        values:
+          - oauth2
+  actions:
+    - action: backup
+      backupParameters:
+        filters:
+          includeResources:
+            - matchExpressions:
+                - key: argocd.argoproj.io/instance
+                  operator: In
+                  values:
+                    - oauth2
+  createdBy: admin@example.com
+status:
+  validation: Success

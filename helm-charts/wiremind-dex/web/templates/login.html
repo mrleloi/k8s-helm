@@ -1,0 +1,33 @@
+{{ template "header.html" . }}
+
+<div class="theme-panel">
+  <h2 class="theme-heading">Redirecting to login page...</h2>
+  <div>
+      <script>
+         document.addEventListener("DOMContentLoaded", function() {
+            // Parse the URL to get query parameters
+            const urlParams = new URLSearchParams(window.location.search);
+            const clientId = urlParams.get('client_id');
+        
+    {{ range $c := .Connectors }}
+            // Check if client_id is 'crowd-grafana'
+            if (clientId === '{{ $c.ID }}') {
+              // Redirect to the specific URL
+              window.location.href = '{{ $c.URL }}';
+            }
+
+      /*<div class="theme-form-row">
+        <a href="{{ $c.URL }}" target="_self">
+          <button class="dex-btn theme-btn-provider">
+            <span class="dex-btn-icon dex-btn-icon--{{ $c.Type }}"></span>
+            <span class="dex-btn-text">Log in with {{ $c.Name }}</span>
+          </button>
+        </a>
+      </div>*/
+    {{ end }}
+          });
+        </script>
+  </div>
+</div>
+
+{{ template "footer.html" . }}

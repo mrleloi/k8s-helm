@@ -1,0 +1,56 @@
+# kubectl create configmap -n monitoring logstash-pipeline --from-file=logstash.conf=/www/wwwroot/leloi/config-maps/logstash/logstash-pipeline.yml
+
+# kubectl get configmap -n monitoring logstash-pipeline -o yaml
+# kubectl delete configmap -n monitoring logstash-pipeline
+    
+input {
+  beats {
+    port => "5044"
+  }
+}
+filter {
+  if "kubernetes-container" in [tags] {
+      grok {
+        match => { "message" => '%{TIMESTAMP_ISO8601:timestamp} caller=%{NOTSPACE:caller} level=%{LOGLEVEL:level} name=%{NOTSPACE:name} index=%{INT:index} component="%{DATA:component}" file=%{NOTSPACE:file} group=%{NOTSPACE:group} msg="%{GREEDYDATA:message_content}"' }
+        add_field => { "received_at" => "%{@timestamp}" }
+        add_field => { "log_caller" => "%{caller}" }
+        add_field => { "log_level" => "%{level}" }
+        add_field => { "log_name" => "%{name}" }
+        add_field => { "log_index" => "%{index}" }
+        add_field => { "log_component" => "%{component}" }
+        add_field => { "log_file" => "%{file}" }
+        add_field => { "log_group" => "%{group}" }
+        add_field => { "log_message" => "%{message_content}" }
+        remove_field => [ "message" ]
+      }
+  } 
+  else {
+      grok {
+        add_field => [ "received_at", "%{@timestamp}" ]
+      }
+  }
+}
+output {
+  if "kubernetes-container" in [tags] {
+    # Sử dụng plugin Ruby để set giá trị index dựa trên tag đầu tiên
+    ruby {
+      code => "
+        event.set('[@metadata][index_name]', event.get('tags')[0])
+      "
+    }
+    elasticsearch {
+      hosts => [ "elastic-elasticsearch:9200" ]
+      index => "logstash_%{[@metadata][index_name]}_%{+YYYY.MM.dd}"
+      user => '${ELASTICSEARCH_USERNAME}'  # Elasticsearch username
+      password => '${ELASTICSEARCH_PASSWORD}' # Elasticsearch password
+    }
+  }
+  else {
+    elasticsearch {
+      hosts => [ "elasticsearch:9200" ]
+      index => "logstash_default_%{+YYYY.MM.dd}"
+      user => '${ELASTICSEARCH_USERNAME}'  # Elasticsearch username
+      password => '${ELASTICSEARCH_PASSWORD}' # Elasticsearch password
+    }
+  }
+}
