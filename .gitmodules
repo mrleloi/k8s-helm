@@ -5,3 +5,6 @@
 	path = anesta-config
 	url = https://github.com/mrleloi/anesta-config.git
 	branch = main
+[submodule "helm-charts/jira-helm"]
+	path = helm-charts/jira-helm
+	url = https://bitbucket.baityapp.online/scm/helmcharts/jira-helm.git
