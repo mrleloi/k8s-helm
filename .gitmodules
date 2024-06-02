@@ -1,3 +1,7 @@
 [submodule "helm-charts/bitbucket"]
 	path = helm-charts/bitbucket
 	url = https://github.com/tintucthethao/bitbucket
+[submodule "anesta-config"]
+	path = anesta-config
+	url = https://github.com/mrleloi/anesta-config.git
+	branch = main

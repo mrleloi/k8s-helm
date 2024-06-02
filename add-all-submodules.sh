@@ -1,8 +1,9 @@
 #!/bin/bash
 
 # Đi đến thư mục gốc chứa các repositories con
-#cd helm-charts
-cd docker-images
+cd /www/wwwroot/leloi
+cd helm-charts
+#cd docker-images
 
 # Khởi tạo git nếu chưa có
 #git init
@@ -11,13 +12,13 @@ cd docker-images
 for d in */ ; do
     # Chỉ xử lý nếu đây là một git repository
     if [ -d "$d/.git" ]; then
-        cd "$d"
+        cd /www/wwwroot/leloi/helm-charts/"$d"
         # Lấy remote URL của repository hiện tại
         remote_url=$(git config --get remote.origin.url)
         # Lấy tên nhánh hiện tại
         current_branch=$(git rev-parse --abbrev-ref HEAD)
         # Trở về thư mục gốc
-        cd ..
+        cd /www/wwwroot/leloi
         # Thêm repository như một submodule
         git submodule add -b "$current_branch" "$remote_url" "$d"
     fi
