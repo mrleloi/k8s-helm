@@ -1,7 +1,8 @@
 #!/bin/bash
 
 # Đi đến thư mục gốc chứa các repositories con
-#cd path/to/parent-folder
+#cd helm-charts
+cd docker-images
 
 # Khởi tạo git nếu chưa có
 #git init
